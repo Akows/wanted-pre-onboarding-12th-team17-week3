@@ -81,6 +81,7 @@ export const SearchBar: React.FC = () => {
 const SearchBarWrapper = styled.div<{ isFocused: boolean }>`
   width: 70%;
   height: 70px;
+  min-height: 70px; // 높이의 최소값 설정
   margin-top: 30px;
   display: inline-flex;
   align-items: center;
