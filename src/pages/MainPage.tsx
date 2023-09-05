@@ -39,8 +39,8 @@ const MainPageWrapper = styled.div`
 `;
 
 const MainTitle = styled.p`
-  font-size: 32px;
+  font-size: 38px;
   font-weight: 900;
-  letter-spacing: -4px;
+  letter-spacing: -3.5px;
   margin: 0;
 `;
