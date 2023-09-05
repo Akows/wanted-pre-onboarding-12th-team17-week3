@@ -62,7 +62,7 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({
 
 const SuggestionListWrapper = styled.div`
   width: 70%;
-  max-height: 250px;
+  max-height: 500px;
   margin-top: 10px;
   display: flex;
   flex-direction: column;
