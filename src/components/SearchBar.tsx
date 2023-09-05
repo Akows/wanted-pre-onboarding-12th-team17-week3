@@ -2,15 +2,26 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai';
 import { SuggestionList } from './SuggestionList';
+import useSearchAPI from '../hooks/useSearchAPI';
 
 export const SearchBar: React.FC = () => {
+  // API 호출 기능.
+  const { isLoading, isError, data, search } = useSearchAPI();
+
   // 검색어 키워드를 제어.
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value);
-  };
+    const value = event.target.value;
+    setSearchTerm(value);
 
+    // 검색어가 있으면 API 호출
+    if (value) {
+      console.log(value);
+      console.log(data);
+      search(value);
+    }
+  };
   const clearSearchTerm = (event: React.MouseEvent) => {
     // 이벤트 버블링 현상에 의해서 ClearButton의 함수가 동작할 때..
     // 상위 태그 SearchBarInput의 setIsFocused 함수가 덩달아 동작해버린다.
@@ -45,7 +56,7 @@ export const SearchBar: React.FC = () => {
         </SearchBarButton>
       </SearchBarWrapper>
 
-      {isFocused && <SuggestionList />}
+      {isFocused && <SuggestionList data={data} />}
     </>
   );
 };

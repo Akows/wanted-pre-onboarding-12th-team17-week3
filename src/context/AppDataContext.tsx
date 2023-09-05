@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import { SearchResult } from '../types/SearchResult';
 
 type AppDataProviderProps = {
   children: React.ReactNode;
@@ -7,19 +8,19 @@ type AppDataProviderProps = {
 type AppDataState = {
   isLoading: boolean;
   isError: boolean;
-  displayComponent: string | null;
+  data: SearchResult[];
 };
 
 const initialState: AppDataState = {
   isLoading: false,
   isError: false,
-  displayComponent: 'main',
+  data: [],
 };
 
 // 유니온 타입을 이용하여 action의 타입을 정의.
 type AppDataAction =
   | { type: 'FETCH_INIT' }
-  | { type: 'FETCH_SUCCESS'; component: string }
+  | { type: 'FETCH_SUCCESS'; payload: SearchResult[] }
   | { type: 'FETCH_ERROR' };
 
 // 제네릭 부분은 해당 컨텍스트에 저장될 데이터의 형태를 정의.
@@ -45,7 +46,7 @@ const appDataReducer = (
         ...state,
         isLoading: false,
         isError: false,
-        displayComponent: action.component,
+        data: action.payload,
       };
     case 'FETCH_ERROR':
       return { ...state, isLoading: false, isError: true };

@@ -1,33 +1,32 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import axios from 'axios';
-
-interface SearchResult {
-  sickCd: string;
-  sickNm: string;
-}
+import { AppDataContext } from '../context/AppDataContext';
+import { SearchResult } from '../types/SearchResult';
 
 const useSearchAPI = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<null | Error>(null);
-  const [data, setData] = useState<SearchResult[] | null>(null);
+  // 전역 상태와 디스패치 함수를 가져옵니다.
+  const context = useContext(AppDataContext);
+
+  if (!context) {
+    throw new Error('useSearchAPI must be used within a AppDataProvider');
+  }
+
+  const { dispatch } = context;
 
   const search = async (query: string) => {
-    setLoading(true);
-    setError(null);
+    dispatch({ type: 'FETCH_INIT' });
 
     try {
       const response = await axios.get<SearchResult[]>(
         `http://localhost:4000/sick?q=${query}`,
       );
-      setData(response.data);
+      dispatch({ type: 'FETCH_SUCCESS', payload: response.data });
     } catch (event: any) {
-      setError(event);
-    } finally {
-      setLoading(false);
+      dispatch({ type: 'FETCH_ERROR' });
     }
   };
 
-  return { loading, error, data, search };
+  return { ...context.state, search };
 };
 
 export default useSearchAPI;
