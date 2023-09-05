@@ -70,7 +70,7 @@ export const SearchBar: React.FC = () => {
 
       {isFocused && (
         <>
-          <SuggestionList data={data} />
+          <SuggestionList data={data} searchTerm={searchTerm} />
         </>
       )}
     </>
