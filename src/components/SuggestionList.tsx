@@ -5,11 +5,13 @@ import { SearchResult } from '../types/SearchResult';
 interface SuggestionListProps {
   data: SearchResult[] | null;
   searchTerm: string;
+  selectedIndex: number; // 선택된 항목의 인덱스를 prop으로 받음
 }
 
 export const SuggestionList: React.FC<SuggestionListProps> = ({
   data,
   searchTerm,
+  selectedIndex,
 }) => {
   /**
    * 주어진 문자열 내에서 특정 키워드를 강조하는 함수.
@@ -48,8 +50,14 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({
       <Title>추천 검색어</Title>
       <Divider />
       {data && data.length > 0 ? (
-        data.map(item => (
-          <SearchItem key={item.sickCd}>
+        data.map((item, index) => (
+          <SearchItem
+            key={item.sickCd}
+            style={{
+              backgroundColor:
+                index === selectedIndex ? '#f3f3f3' : 'transparent',
+            }} // 선택된 항목의 배경색 변경
+          >
             {highlightKeyword(item.sickNm, searchTerm)}{' '}
           </SearchItem>
         ))

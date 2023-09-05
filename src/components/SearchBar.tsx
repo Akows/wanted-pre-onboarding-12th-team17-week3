@@ -49,9 +49,30 @@ export const SearchBar: React.FC = () => {
   // 추천 검색어 UI의 출력 여부를 제어하는 상태 변수.
   const [isFocused, setIsFocused] = useState(false);
 
+  // 선택된 항목의 인덱스를 추적하는 상태 변수
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    switch (event.key) {
+      case 'ArrowDown':
+        // 아래쪽 키를 눌렀을 때, 선택된 인덱스를 증가시킴
+        setSelectedIndex(prevIndex => Math.min(prevIndex + 1, data.length - 1));
+        break;
+      case 'ArrowUp':
+        // 위쪽 키를 눌렀을 때, 선택된 인덱스를 감소시킴
+        setSelectedIndex(prevIndex => Math.max(prevIndex - 1, 0));
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <>
-      <SearchBarWrapper isFocused={isFocused}>
+      <SearchBarWrapper
+        isFocused={isFocused}
+        onKeyDown={handleKeyDown} // 키보드 이벤트 리스너 추가
+      >
         {/* input 태그에 Focus 여부에 따라 isFocused 변수에 변화를 준다. */}
         <SearchBarInput
           placeholder="🔍 질환명을 입력해 주세요."
@@ -64,7 +85,13 @@ export const SearchBar: React.FC = () => {
         <SearchBarButton />
       </SearchBarWrapper>
 
-      {isFocused && <SuggestionList data={data} searchTerm={searchTerm} />}
+      {isFocused && (
+        <SuggestionList
+          data={data}
+          searchTerm={searchTerm}
+          selectedIndex={selectedIndex}
+        />
+      )}
     </>
   );
 };
