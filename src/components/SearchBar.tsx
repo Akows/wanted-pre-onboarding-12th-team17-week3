@@ -28,8 +28,10 @@ export const SearchBar: React.FC = () => {
     }
 
     // 검색어가 있으면 API 호출
-    if (searchTerm) {
-      search(searchTerm);
+    // 왜 searchTerm를 사용하지 않는가?
+    // searchTerm는 useState로 선언되어 비동기식으로 동작하기 때문에 사용자의 입력을 실시간으로 받아오지 못하기 때문.
+    if (value) {
+      search(value);
     }
   };
   const clearSearchTerm = (event: React.MouseEvent) => {
