@@ -26,7 +26,11 @@ const useSearchAPI = () => {
     }
   };
 
-  return { ...context.state, search };
+  const clearData = () => {
+    dispatch({ type: 'DATA_CLEAN' });
+  };
+
+  return { ...context.state, search, clearData };
 };
 
 export default useSearchAPI;

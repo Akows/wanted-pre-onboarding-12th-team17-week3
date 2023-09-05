@@ -21,7 +21,8 @@ const initialState: AppDataState = {
 type AppDataAction =
   | { type: 'FETCH_INIT' }
   | { type: 'FETCH_SUCCESS'; payload: SearchResult[] }
-  | { type: 'FETCH_ERROR' };
+  | { type: 'FETCH_ERROR' }
+  | { type: 'DATA_CLEAN' };
 
 // 제네릭 부분은 해당 컨텍스트에 저장될 데이터의 형태를 정의.
 // 다시 말해, 해당 컨텍스트의 값으로 올 수 있는 것의 타입을 제한.
@@ -50,6 +51,8 @@ const appDataReducer = (
       };
     case 'FETCH_ERROR':
       return { ...state, isLoading: false, isError: true };
+    case 'DATA_CLEAN':
+      return { ...state, isLoading: false, isError: false, data: [] };
 
     default:
       throw new Error(`Unhandled action type: ${action}`);
