@@ -1,16 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { SearchBar } from '../components/SearchBar';
-import { AppDataContext } from '../context/AppDataContext';
+
 const MainPage: React.FC = () => {
-  const context = useContext(AppDataContext);
-
-  if (!context) {
-    throw new Error('Context API Provider가 로딩되지 않았습니다.');
-  }
-
-  const { state, dispatch } = context;
-
   return (
     <MainPageWrapper>
       <MainTitle>국내 모든 임상시험 검색하고</MainTitle>

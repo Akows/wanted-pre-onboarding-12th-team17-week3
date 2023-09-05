@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai';
 import { SuggestionList } from './SuggestionList';
 import useSearchAPI from '../hooks/useSearchAPI';
 import ClearButton from './buttons/ClearButton';
