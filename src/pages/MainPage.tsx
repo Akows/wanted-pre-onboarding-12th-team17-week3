@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
+import styled from 'styled-components';
+import { SearchBar } from '../components/SearchBar';
 import { AppDataContext } from '../context/AppDataContext';
-
 const MainPage: React.FC = () => {
   const context = useContext(AppDataContext);
 
@@ -10,25 +11,36 @@ const MainPage: React.FC = () => {
 
   const { state, dispatch } = context;
 
-  // Context API 테스트 1
-  console.log(state);
-
-  // Context API 테스트 2
-  const handleClick = (componentName: string) => {
-    dispatch({
-      type: 'FETCH_SUCCESS',
-      component: componentName,
-    });
-  };
-
   return (
-    <React.Fragment>
-      <div>MainPage</div>
-      <div>{state.displayComponent === 'main' && <p>'메인!'</p>}</div>
-      <button onClick={() => handleClick('nomain')}>no</button>
-      <button onClick={() => handleClick('main')}>yes</button>
-    </React.Fragment>
+    <MainPageWrapper>
+      <MainTitle>국내 모든 임상시험 검색하고</MainTitle>
+      <MainTitle>온라인으로 참여하기</MainTitle>
+      <SearchBar />
+    </MainPageWrapper>
   );
 };
 
 export default MainPage;
+
+const MainPageWrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+
+  display: inline-flex;
+  align-items: center;
+  flex-direction: column;
+
+  background-color: #cae9ff;
+
+  & > p:nth-child(1) {
+    margin-top: 120px;
+    margin-bottom: 10px;
+  }
+`;
+
+const MainTitle = styled.p`
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -4px;
+  margin: 0;
+`;
