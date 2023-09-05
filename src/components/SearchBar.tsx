@@ -6,7 +6,7 @@ import useSearchAPI from '../hooks/useSearchAPI';
 
 export const SearchBar: React.FC = () => {
   // API 호출 기능.
-  const { isLoading, isError, data, search } = useSearchAPI();
+  const { isLoading, isError, data, search, clearData } = useSearchAPI();
 
   // 검색어 키워드를 제어.
   const [searchTerm, setSearchTerm] = useState('');
@@ -15,11 +15,21 @@ export const SearchBar: React.FC = () => {
     const value = event.target.value;
     setSearchTerm(value);
 
+    // 만약 검색어가 비어 있거나 띄어쓰기만 있다면 API 호출을 방지하고 초기화
+    // 공백 문자만 존재하는 경우를 방지하려면 trim을 사용해야한다.
+    // trim() : 문자열의 시작과 끝에서 공백 문자를 제거한 결과값을 반환.
+
+    // value에 값이 없거나 공백문자만 존재한다 - 공백 문자를 제거하고 빈 문자열 ""을 반환.
+    // value에 정상적인 값이 존재한다. - 값 앞 뒤에 공백 문자가 존재한다면 이를 제거하고 원래 문자열을 그대로 반환.
+    // 따라서 value.trim()의 결과값을 조건식으로 사용한다. 결과값이 빈 문자열일 경우에는 검색 기능을 호출하지 않고 data를 비운다.
+    if (value.trim() === '') {
+      clearData();
+      return;
+    }
+
     // 검색어가 있으면 API 호출
-    if (value) {
-      console.log(value);
-      console.log(data);
-      search(value);
+    if (searchTerm) {
+      search(searchTerm);
     }
   };
   const clearSearchTerm = (event: React.MouseEvent) => {
@@ -56,7 +66,11 @@ export const SearchBar: React.FC = () => {
         </SearchBarButton>
       </SearchBarWrapper>
 
-      {isFocused && <SuggestionList data={data} />}
+      {isFocused && (
+        <>
+          <SuggestionList data={data} />
+        </>
+      )}
     </>
   );
 };
