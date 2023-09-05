@@ -42,6 +42,7 @@ export const SearchBar: React.FC = () => {
     // 또한 이벤트의 기본 동작이 발동되지 않도록 하여 onBlur가 동작하는 것을 막는다
     event.preventDefault();
     setSearchTerm('');
+    clearData();
   };
 
   // 추천 검색어 UI의 출력 여부를 제어하는 상태 변수.
