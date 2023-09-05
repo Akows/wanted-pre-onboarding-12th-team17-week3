@@ -26,6 +26,8 @@ const useSearchAPI = () => {
     // 캐시에 데이터가 없으면 API 호출
     dispatch({ type: 'FETCH_INIT' });
 
+    console.info('calling api');
+
     try {
       const response = await axios.get<SearchResult[]>(
         `http://localhost:4000/sick?q=${query}`,
