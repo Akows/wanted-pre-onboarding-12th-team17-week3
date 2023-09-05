@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai';
 import { SuggestionList } from './SuggestionList';
 import useSearchAPI from '../hooks/useSearchAPI';
+import ClearButton from './buttons/ClearButton';
+import SearchBarButton from './buttons/SearchBarButton';
 
 export const SearchBar: React.FC = () => {
   // API 호출 기능.
@@ -59,21 +61,11 @@ export const SearchBar: React.FC = () => {
           value={searchTerm} // input의 value를 상태에 연결
           onChange={handleInputChange} // 검색어 변경 핸들러 연결
         />
-        {isFocused && (
-          <ClearButton onMouseDown={clearSearchTerm}>
-            <AiOutlineClose size={20} color="white" />
-          </ClearButton>
-        )}
-        <SearchBarButton>
-          <AiOutlineSearch size={32} color="white" />
-        </SearchBarButton>
+        {isFocused && <ClearButton onClick={clearSearchTerm} />}
+        <SearchBarButton />
       </SearchBarWrapper>
 
-      {isFocused && (
-        <>
-          <SuggestionList data={data} searchTerm={searchTerm} />
-        </>
-      )}
+      {isFocused && <SuggestionList data={data} searchTerm={searchTerm} />}
     </>
   );
 };
@@ -117,46 +109,5 @@ const SearchBarInput = styled.input`
   // input 태그가 focus 상태일때는 placeholder의 글자 색을 투명하게
   &:focus::placeholder {
     color: transparent;
-  }
-`;
-
-const ClearButton = styled.button`
-  width: 30px; // 버튼의 너비 설정
-  height: 30px; // 버튼의 높이 설정
-  display: flex; // 내부 아이콘을 중앙에 배치하기 위한 스타일
-  justify-content: center; // 가로 방향으로 중앙 정렬
-  align-items: center; // 세로 방향으로 중앙 정렬
-  background: none;
-  border-radius: 50%; // 버튼을 원형으로 만들기 위한 스타일
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin-right: 10px;
-  background-color: #94a0ac;
-
-  &:hover {
-    color: red;
-  }
-`;
-
-const SearchBarButton = styled.button`
-  width: 15%;
-  max-width: 60px; // 버튼의 최대 너비 설정
-  height: 80%;
-  border-radius: 100%;
-  border: none;
-  background-color: #007be9;
-  flex-shrink: 0;
-  margin-left: auto; // SearchBarButton을 항상 오른쪽으로 정렬
-  margin-right: 3px; // 우측 끝에서 3px 떨어진 지점에 위치
-
-  transition: background-color 0.3s ease; // 0.3초 동안 background-color가 부드럽게 변경됨
-
-  &:hover {
-    background-color: black;
-  }
-
-  @media (max-width: 1000px) {
-    width: 30%;
   }
 `;
