@@ -9,6 +9,7 @@ import {
   FETCH_INIT,
   FETCH_SUCCESS,
 } from '../constants/actionTypes';
+import { handleError } from '../utils/errorHandler';
 
 const useSearchAPI = () => {
   const context = useContext(AppDataContext);
@@ -40,8 +41,7 @@ const useSearchAPI = () => {
       setCachedData(query, data);
       dispatch({ type: FETCH_SUCCESS, payload: data });
     } catch (event: any) {
-      const errorCode = event?.response?.status;
-      const errorMessage = event?.message || 'An unexpected error occurred';
+      const { errorCode, errorMessage } = handleError(event);
       dispatch({ type: FETCH_ERROR, payload: { errorCode, errorMessage } });
     }
   };
