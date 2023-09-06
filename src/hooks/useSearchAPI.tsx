@@ -31,13 +31,15 @@ const useSearchAPI = () => {
 
     try {
       const response = await axios.get<SearchResult[]>(
-        `http://localhost:4000/sick?q=${query}`,
+        `http://localhost:4000/sisgfdck?q=${query}`,
       );
       // 응답 데이터를 캐시에 저장
       setCachedData(query, response.data);
       dispatch({ type: 'FETCH_SUCCESS', payload: response.data });
     } catch (event: any) {
-      dispatch({ type: 'FETCH_ERROR' });
+      const errorCode = event?.response?.status; // Axios의 response object에서 status code를 추출
+      const errorMessage = event?.message || 'An unexpected error occurred'; // 에러 메시지가 없는 경우 기본 메시지 사용
+      dispatch({ type: 'FETCH_ERROR', payload: { errorCode, errorMessage } });
     }
   };
 

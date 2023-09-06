@@ -8,12 +8,16 @@ type AppDataProviderProps = {
 type AppDataState = {
   isLoading: boolean;
   isError: boolean;
+  errorCode: string;
+  errorMessage: string;
   data: SearchResult[];
 };
 
 const initialState: AppDataState = {
   isLoading: false,
   isError: false,
+  errorCode: '',
+  errorMessage: '',
   data: [],
 };
 
@@ -21,7 +25,10 @@ const initialState: AppDataState = {
 type AppDataAction =
   | { type: 'FETCH_INIT' }
   | { type: 'FETCH_SUCCESS'; payload: SearchResult[] }
-  | { type: 'FETCH_ERROR' }
+  | {
+      type: 'FETCH_ERROR';
+      payload: { errorCode: string; errorMessage: string };
+    }
   | { type: 'DATA_CLEAN' };
 
 // 제네릭 부분은 해당 컨텍스트에 저장될 데이터의 형태를 정의.
@@ -50,7 +57,13 @@ const appDataReducer = (
         data: action.payload,
       };
     case 'FETCH_ERROR':
-      return { ...state, isLoading: false, isError: true };
+      return {
+        ...state,
+        isLoading: false,
+        isError: true,
+        errorCode: action.payload.errorCode,
+        errorMessage: action.payload.errorMessage,
+      };
     case 'DATA_CLEAN':
       return { ...state, isLoading: false, isError: false, data: [] };
 
