@@ -40,7 +40,7 @@ const useSearchAPI = () => {
       // 응답 데이터를 캐시에 저장
       // 3번째 인자로 초를 입력할 경우 캐싱 유효 기간을 따로 설정할 수 있음.
       // 인자를 사용하지 않을 경우 기본 캐싱 유효 기간은 1시간.
-      saveDataToCache(query, data);
+      saveDataToCache(query, data, 60);
       dispatch({ type: FETCH_SUCCESS, payload: data });
     } catch (event: any) {
       const { errorCode, errorMessage } = handleError(event);
