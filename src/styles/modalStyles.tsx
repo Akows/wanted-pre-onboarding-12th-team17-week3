@@ -20,4 +20,10 @@ export const ModalContent = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
+  align-items: center;
+`;
+
+export const ModalText = styled.p`
+  font-size: 32px;
+  font-weight: 900;
 `;

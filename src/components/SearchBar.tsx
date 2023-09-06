@@ -9,7 +9,15 @@ import ErrorModal from './modals/ErrorModal';
 
 export const SearchBar: React.FC = () => {
   // API 호출 기능.
-  const { isLoading, isError, data, search, clearData } = useSearchAPI();
+  const {
+    isLoading,
+    isError,
+    errorCode,
+    errorMessage,
+    data,
+    search,
+    clearData,
+  } = useSearchAPI();
 
   // 검색어 키워드를 제어.
   const [searchTerm, setSearchTerm] = useState('');
@@ -69,12 +77,12 @@ export const SearchBar: React.FC = () => {
     }
   };
 
-  // if (isLoading) {
-  //   return <LoadingModal />;
-  // }
+  if (isLoading) {
+    return <LoadingModal />;
+  }
 
-  if (true) {
-    return <ErrorModal />;
+  if (isError) {
+    return <ErrorModal errorCode={errorCode} errorMessage={errorMessage} />;
   }
 
   return (
