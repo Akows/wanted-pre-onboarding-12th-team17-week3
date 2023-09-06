@@ -31,7 +31,7 @@ const useSearchAPI = () => {
 
     try {
       const response = await axios.get<SearchResult[]>(
-        `http://localhost:4000/sisgfdck?q=${query}`,
+        `http://localhost:4000/sick?q=${query}`,
       );
       // 응답 데이터를 캐시에 저장
       setCachedData(query, response.data);

@@ -77,6 +77,19 @@ export const SearchBar: React.FC = () => {
     }
   };
 
+  // if (true) {
+  //   return <LoadingModal />;
+  // }
+
+  // if (true) {
+  //   return (
+  //     <ErrorModal
+  //       errorCode="테스트용 에러코드"
+  //       errorMessage="테스트용 에러 메시지"
+  //     />
+  //   );
+  // }
+
   if (isLoading) {
     return <LoadingModal />;
   }
