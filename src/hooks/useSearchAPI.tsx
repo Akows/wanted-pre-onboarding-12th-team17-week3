@@ -31,7 +31,9 @@ const useSearchAPI = () => {
 
     try {
       const response = await axios.get<SearchResult[]>(
-        `http://localhost:4000/sick?q=${query}`,
+        // API 호출 주소를 로컬에서 배포 주소로 변경.
+        `https://preonboardingapiserver-7ut5pmd4u-akows.vercel.app/api/data?q=${query}`,
+        // `http://localhost:4000/sick?q=${query}`,
       );
       // 응답 데이터를 캐시에 저장
       setCachedData(query, response.data);
