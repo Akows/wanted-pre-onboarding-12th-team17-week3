@@ -1,8 +1,13 @@
 export const handleError = (error: any) => {
   let errorMessage = '예기치 않은 오류가 발생했습니다.';
-  const errorCode = error?.response?.status;
+  let errorCode;
 
-  if (errorCode) {
+  if (error?.response) {
+    errorCode = error?.response?.status;
+
+    // 기본 오류 메시지를 덮어쓰기 전에 서버에서 반환된 에러 메시지를 체크
+    errorMessage = error?.response?.data?.message || errorMessage;
+
     switch (errorCode) {
       case 400:
         errorMessage = '잘못된 요청입니다. 입력을 확인하고 다시 시도해주세요.';
@@ -12,9 +17,6 @@ export const handleError = (error: any) => {
         break;
       case 500:
         errorMessage = '서버 오류입니다. 잠시 후 다시 시도해주세요.';
-        break;
-      default:
-        errorMessage = error?.response?.data?.message || errorMessage;
         break;
     }
   } else if (error.request) {
