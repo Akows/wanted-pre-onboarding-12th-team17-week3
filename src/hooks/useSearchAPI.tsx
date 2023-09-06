@@ -26,6 +26,7 @@ const useSearchAPI = () => {
     // 캐시에 데이터가 없으면 API 호출
     dispatch({ type: 'FETCH_INIT' });
 
+    // API가 호출되었다는 사실을 콘솔에 출력하기 위한 info 구문.
     console.info('calling api');
 
     try {

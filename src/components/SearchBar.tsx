@@ -4,6 +4,8 @@ import { SuggestionList } from './SuggestionList';
 import useSearchAPI from '../hooks/useSearchAPI';
 import ClearButton from './buttons/ClearButton';
 import SearchBarButton from './buttons/SearchBarButton';
+import LoadingModal from './modals/LoadingModal';
+import ErrorModal from './modals/ErrorModal';
 
 export const SearchBar: React.FC = () => {
   // API 호출 기능.
@@ -66,6 +68,14 @@ export const SearchBar: React.FC = () => {
         break;
     }
   };
+
+  // if (isLoading) {
+  //   return <LoadingModal />;
+  // }
+
+  if (true) {
+    return <ErrorModal />;
+  }
 
   return (
     <>

@@ -24,6 +24,7 @@ const GlobalStyles = createGlobalStyle`
   ::-webkit-scrollbar-track {
     background-color: #f1f1f1; /* 스크롤바 배경 색상 */
   }
+
 `;
 
 export default GlobalStyles;
