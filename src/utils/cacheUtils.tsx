@@ -43,3 +43,16 @@ export const getCachedData = (key: string) => {
   // 만료되지 않았다면, 아이템의 value 값을 반환합니다.
   return item.value;
 };
+
+// 캐싱 관련 로직을 커스텀 훅에서 분리.
+export const fetchDataFromCache = (query: string) => {
+  return getCachedData(query);
+};
+
+export const saveDataToCache = (
+  query: string,
+  data: any,
+  duration?: number,
+) => {
+  setCachedData(query, data, duration);
+};
