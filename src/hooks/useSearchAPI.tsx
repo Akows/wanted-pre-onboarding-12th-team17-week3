@@ -1,9 +1,14 @@
 import { useCallback, useContext } from 'react';
-import axios from 'axios';
 import { AppDataContext } from '../context/AppDataContext';
-import { SearchResult } from '../types/SearchResult';
 import { getCachedData, setCachedData } from '../utils/cacheUtils';
 import { debounce } from '../utils/debounce';
+import { searchQuery } from '../api/searchAPI';
+import {
+  DATA_CLEAN,
+  FETCH_ERROR,
+  FETCH_INIT,
+  FETCH_SUCCESS,
+} from '../constants/actionTypes';
 
 const useSearchAPI = () => {
   const context = useContext(AppDataContext);
@@ -20,26 +25,24 @@ const useSearchAPI = () => {
 
     if (cachedData) {
       // 캐시에 데이터가 있으면 반환
-      dispatch({ type: 'FETCH_SUCCESS', payload: cachedData });
+      dispatch({ type: FETCH_SUCCESS, payload: cachedData });
       return;
     }
 
     // 캐시에 데이터가 없으면 API 호출
-    dispatch({ type: 'FETCH_INIT' });
+    dispatch({ type: FETCH_INIT });
 
     console.info('calling api');
 
     try {
-      const response = await axios.get<SearchResult[]>(
-        `https://preonboardingapiserver.vercel.app/api/data?q=${query}`,
-      );
+      const data = await searchQuery(query);
       // 응답 데이터를 캐시에 저장
-      setCachedData(query, response.data);
-      dispatch({ type: 'FETCH_SUCCESS', payload: response.data });
+      setCachedData(query, data);
+      dispatch({ type: FETCH_SUCCESS, payload: data });
     } catch (event: any) {
       const errorCode = event?.response?.status;
       const errorMessage = event?.message || 'An unexpected error occurred';
-      dispatch({ type: 'FETCH_ERROR', payload: { errorCode, errorMessage } });
+      dispatch({ type: FETCH_ERROR, payload: { errorCode, errorMessage } });
     }
   };
 
@@ -48,7 +51,7 @@ const useSearchAPI = () => {
   const search = useCallback(debounce(actualSearch, 1000), []);
 
   const clearData = () => {
-    dispatch({ type: 'DATA_CLEAN' });
+    dispatch({ type: DATA_CLEAN });
   };
 
   return { ...context.state, search, clearData };
