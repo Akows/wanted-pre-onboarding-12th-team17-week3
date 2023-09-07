@@ -77,9 +77,9 @@ export const SearchBar: React.FC = () => {
   //   );
   // }
 
-  if (isLoading) {
-    return <LoadingModal />;
-  }
+  // if (isLoading) {
+  //   return <LoadingModal />;
+  // }
 
   if (isError) {
     return <ErrorModal errorCode={errorCode} errorMessage={errorMessage} />;
@@ -105,6 +105,7 @@ export const SearchBar: React.FC = () => {
 
       {isFocused && (
         <SuggestionList
+          isLoading={isLoading}
           data={data}
           searchTerm={searchTerm}
           selectedIndex={selectedIndex}

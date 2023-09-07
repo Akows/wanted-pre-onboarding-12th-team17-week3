@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { SearchResult } from '../types/SearchResult';
 
 interface SuggestionListProps {
+  isLoading: boolean;
   data: SearchResult[] | null;
   searchTerm: string;
   selectedIndex: number; // 선택된 항목의 인덱스를 prop으로 받음
@@ -11,6 +12,7 @@ interface SuggestionListProps {
 }
 
 export const SuggestionList: React.FC<SuggestionListProps> = ({
+  isLoading,
   data,
   searchTerm,
   selectedIndex,
@@ -51,27 +53,34 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({
   return (
     <SuggestionListWrapper ref={modalRef}>
       <CurrentSearchTerm>🔍 {searchTerm}</CurrentSearchTerm>
-      <Title>추천 검색어</Title>
-      <Divider />
-      {data && data.length > 0 ? (
-        data.map((item, index) => (
-          <SearchItem
-            key={item.sickCd}
-            ref={(el: HTMLDivElement | null) => {
-              if (el && itemRefs.current) {
-                itemRefs.current[index] = el;
-              }
-            }}
-            style={{
-              backgroundColor:
-                index === selectedIndex ? '#f3f3f3' : 'transparent',
-            }} // 선택된 항목의 배경색 변경
-          >
-            {highlightKeyword(item.sickNm, searchTerm)}{' '}
-          </SearchItem>
-        ))
-      ) : (
-        <NoDataText>검색어 없음</NoDataText>
+
+      {isLoading && <LoadingText>로딩 중..</LoadingText>}
+
+      {!isLoading && (
+        <>
+          <Title>추천 검색어</Title>
+          <Divider />
+          {data && data.length > 0 ? (
+            data.map((item, index) => (
+              <SearchItem
+                key={item.sickCd}
+                ref={(el: HTMLDivElement | null) => {
+                  if (el && itemRefs.current) {
+                    itemRefs.current[index] = el;
+                  }
+                }}
+                style={{
+                  backgroundColor:
+                    index === selectedIndex ? '#f3f3f3' : 'transparent',
+                }} // 선택된 항목의 배경색 변경
+              >
+                {highlightKeyword(item.sickNm, searchTerm)}{' '}
+              </SearchItem>
+            ))
+          ) : (
+            <NoDataText>검색어 없음</NoDataText>
+          )}
+        </>
       )}
     </SuggestionListWrapper>
   );
@@ -104,6 +113,12 @@ const CurrentSearchTerm = styled.div`
   font-size: 19px;
   border-bottom: 1px solid #ddd; // 아래에 얇은 구분선 추가
   margin-bottom: 5px; // Title과의 간격 조절
+`;
+
+const LoadingText = styled.p`
+  font-weight: bold;
+  padding: 10px 15px;
+  margin: 0;
 `;
 
 const Title = styled.p`
