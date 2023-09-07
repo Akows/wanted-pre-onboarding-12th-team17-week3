@@ -6,6 +6,7 @@ import ClearButton from './buttons/ClearButton';
 import SearchBarButton from './buttons/SearchBarButton';
 import LoadingModal from './modals/LoadingModal';
 import ErrorModal from './modals/ErrorModal';
+import useKeyboardNavigation from '../hooks/useKeyboardNavigation';
 
 export const SearchBar: React.FC = () => {
   // API 호출 기능.
@@ -21,6 +22,10 @@ export const SearchBar: React.FC = () => {
 
   // 검색어 키워드를 제어.
   const [searchTerm, setSearchTerm] = useState('');
+
+  // 키보드 입력 기능 커스텀 훅
+  const { selectedIndex, modalRef, itemRefs, handleKeyDown } =
+    useKeyboardNavigation({ data, setSearchTerm, search });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -58,36 +63,6 @@ export const SearchBar: React.FC = () => {
 
   // 추천 검색어 UI의 출력 여부를 제어하는 상태 변수.
   const [isFocused, setIsFocused] = useState(false);
-
-  // 선택된 항목의 인덱스를 추적하는 상태 변수
-  const [selectedIndex, setSelectedIndex] = useState(-1);
-
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    switch (event.key) {
-      case 'ArrowDown':
-        // 아래쪽 키를 눌렀을 때, 선택된 인덱스를 증가시킴
-        setSelectedIndex(prevIndex => Math.min(prevIndex + 1, data.length - 1));
-        break;
-      case 'ArrowUp':
-        // 위쪽 키를 눌렀을 때, 선택된 인덱스를 감소시킴
-        setSelectedIndex(prevIndex => Math.max(prevIndex - 1, 0));
-        break;
-      case 'Enter':
-        // Enter키가 눌렸을 때
-        // selectedIndex가 존재하고, 검색 결과 데이터가 제대로 존재하고, 검색 결과 데이터의 selectedIndex가 제대로 존재하는지 확인한다.
-        // 선택된 항목이 있는지, 검색 결과 데이터가 제대로 존재하는지, 선택된 아이템이 결과 데이터에 진짜 있는지 확인한다.
-        if (selectedIndex !== -1 && data && data[selectedIndex]) {
-          // 검색 결과 데이터의 selectedIndex의 sickNm을 새로운 검색 키워드로 가져온다.
-          const selectedKeyword = data[selectedIndex].sickNm;
-          // 이를 이용해 API 호출을 실행하고, 화면상에서도 키워드를 변경해준다.
-          setSearchTerm(selectedKeyword);
-          search(selectedKeyword);
-        }
-        break;
-      default:
-        break;
-    }
-  };
 
   // if (true) {
   //   return <LoadingModal />;
@@ -133,6 +108,8 @@ export const SearchBar: React.FC = () => {
           data={data}
           searchTerm={searchTerm}
           selectedIndex={selectedIndex}
+          modalRef={modalRef}
+          itemRefs={itemRefs}
         />
       )}
     </>

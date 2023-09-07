@@ -6,12 +6,16 @@ interface SuggestionListProps {
   data: SearchResult[] | null;
   searchTerm: string;
   selectedIndex: number; // 선택된 항목의 인덱스를 prop으로 받음
+  modalRef: React.RefObject<HTMLDivElement>;
+  itemRefs: React.RefObject<HTMLElement[]>;
 }
 
 export const SuggestionList: React.FC<SuggestionListProps> = ({
   data,
   searchTerm,
   selectedIndex,
+  modalRef,
+  itemRefs,
 }) => {
   /**
    * 주어진 문자열 내에서 특정 키워드를 강조하는 함수.
@@ -45,7 +49,7 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({
   };
 
   return (
-    <SuggestionListWrapper>
+    <SuggestionListWrapper ref={modalRef}>
       <CurrentSearchTerm>🔍 {searchTerm}</CurrentSearchTerm>
       <Title>추천 검색어</Title>
       <Divider />
@@ -53,6 +57,11 @@ export const SuggestionList: React.FC<SuggestionListProps> = ({
         data.map((item, index) => (
           <SearchItem
             key={item.sickCd}
+            ref={(el: HTMLDivElement | null) => {
+              if (el && itemRefs.current) {
+                itemRefs.current[index] = el;
+              }
+            }}
             style={{
               backgroundColor:
                 index === selectedIndex ? '#f3f3f3' : 'transparent',
