@@ -72,6 +72,18 @@ export const SearchBar: React.FC = () => {
         // 위쪽 키를 눌렀을 때, 선택된 인덱스를 감소시킴
         setSelectedIndex(prevIndex => Math.max(prevIndex - 1, 0));
         break;
+      case 'Enter':
+        // Enter키가 눌렸을 때
+        // selectedIndex가 존재하고, 검색 결과 데이터가 제대로 존재하고, 검색 결과 데이터의 selectedIndex가 제대로 존재하는지 확인한다.
+        // 선택된 항목이 있는지, 검색 결과 데이터가 제대로 존재하는지, 선택된 아이템이 결과 데이터에 진짜 있는지 확인한다.
+        if (selectedIndex !== -1 && data && data[selectedIndex]) {
+          // 검색 결과 데이터의 selectedIndex의 sickNm을 새로운 검색 키워드로 가져온다.
+          const selectedKeyword = data[selectedIndex].sickNm;
+          // 이를 이용해 API 호출을 실행하고, 화면상에서도 키워드를 변경해준다.
+          setSearchTerm(selectedKeyword);
+          search(selectedKeyword);
+        }
+        break;
       default:
         break;
     }
