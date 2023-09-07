@@ -132,9 +132,9 @@ const SearchBarWrapper = styled.div<{ isFocused: boolean }>`
   border: ${props => (props.isFocused ? '2px solid #007be9' : 'none')};
 
   @media (max-width: 600px) {
-    width: 95%; // 너비를 100%로 설정
+    width: 99%; // 너비를 100%로 설정
     border-radius: 0px;
-    padding-left: 10px;
+    padding-left: 0px;
     padding-right: 10px;
     margin-top: 0px;
   }
