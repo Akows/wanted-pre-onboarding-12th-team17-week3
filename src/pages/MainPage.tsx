@@ -42,6 +42,10 @@ const Header = styled.header`
   align-items: center;
   top: 0;
   margin-bottom: 50px;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
 
 const Logo = styled.img`
@@ -55,4 +59,8 @@ const MainTitle = styled.p`
   font-weight: 900;
   letter-spacing: -3.5px;
   margin: 0;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;

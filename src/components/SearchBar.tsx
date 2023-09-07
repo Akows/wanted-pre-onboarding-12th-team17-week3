@@ -130,6 +130,14 @@ const SearchBarWrapper = styled.div<{ isFocused: boolean }>`
 
   // 여기에서 isFocused prop에 따라 테두리 스타일을 적용
   border: ${props => (props.isFocused ? '2px solid #007be9' : 'none')};
+
+  @media (max-width: 600px) {
+    width: 95%; // 너비를 100%로 설정
+    border-radius: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 0px;
+  }
 `;
 
 const SearchBarInput = styled.input`

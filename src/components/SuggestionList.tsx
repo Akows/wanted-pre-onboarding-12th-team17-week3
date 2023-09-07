@@ -86,6 +86,15 @@ const SuggestionListWrapper = styled.div`
   border-radius: 15px;
   background-color: white;
   overflow-y: auto; // 내용이 많아지면 스크롤 가능하도록
+
+  @media (max-width: 600px) {
+    width: 95%; // 너비를 100%로 설정
+    max-height: 100%;
+    border-radius: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 0px;
+  }
 `;
 
 const CurrentSearchTerm = styled.div`
