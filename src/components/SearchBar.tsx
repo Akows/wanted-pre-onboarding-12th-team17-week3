@@ -31,10 +31,9 @@ export const SearchBar: React.FC = () => {
     const value = event.target.value;
     setSearchTerm(value);
 
-    // 만약 검색어가 비어 있거나 띄어쓰기만 있다면 API 호출을 방지하고 초기화
+    // 만약 검색어가 비어 있거나 띄어쓰기만 있다면 API 호출을 방지하고 초기화.
     // 공백 문자만 존재하는 경우를 방지하려면 trim을 사용해야한다.
     // trim() : 문자열의 시작과 끝에서 공백 문자를 제거한 결과값을 반환.
-
     // value에 값이 없거나 공백문자만 존재한다 - 공백 문자를 제거하고 빈 문자열 ""을 반환.
     // value에 정상적인 값이 존재한다. - 값 앞 뒤에 공백 문자가 존재한다면 이를 제거하고 원래 문자열을 그대로 반환.
     // 따라서 value.trim()의 결과값을 조건식으로 사용한다. 결과값이 빈 문자열일 경우에는 검색 기능을 호출하지 않고 data를 비운다.
@@ -51,11 +50,10 @@ export const SearchBar: React.FC = () => {
     }
   };
   const clearSearchTerm = (event: React.MouseEvent) => {
-    // 이벤트 버블링 현상에 의해서 ClearButton의 함수가 동작할 때..
-    // 상위 태그 SearchBarInput의 setIsFocused 함수가 덩달아 동작해버린다.
-    // 이를 방지해주어야 한다.
+    // 이벤트 버블링 방지.
+    // ClearButton의 함수가 동작할 때 상위 태그 SearchBarInput의 setIsFocused 함수가 같이 호출되는 것을 방지한다.
     event.stopPropagation();
-    // 또한 이벤트의 기본 동작이 발동되지 않도록 하여 onBlur가 동작하는 것을 막는다
+    // 이벤트의 기본 동작이 발동되지 않도록 하여 onBlur가 동작하는 것을 막는다
     event.preventDefault();
     setSearchTerm('');
     clearData();
@@ -64,19 +62,9 @@ export const SearchBar: React.FC = () => {
   // 추천 검색어 UI의 출력 여부를 제어하는 상태 변수.
   const [isFocused, setIsFocused] = useState(false);
 
-  // if (true) {
-  //   return <LoadingModal />;
-  // }
-
-  // if (true) {
-  //   return (
-  //     <ErrorModal
-  //       errorCode="테스트용 에러코드"
-  //       errorMessage="테스트용 에러 메시지"
-  //     />
-  //   );
-  // }
-
+  // 더 간결한 로딩 상황에 따른 화면 분기 처리를 위해 로딩 모달 사용을 중단함.
+  // 로딩 상황 처리는 SuggestionList 내부에서 처리.
+  // 다만 언제든 모달을 다시 사용할 수 있도록 코드를 주석처리 해둠.
   // if (isLoading) {
   //   return <LoadingModal />;
   // }
