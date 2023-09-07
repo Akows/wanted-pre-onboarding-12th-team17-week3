@@ -137,29 +137,24 @@ API 호출을 기능을 수행하는 Custom Hooks를 구현. API 호출을 수�
 로컬 스토리지 기능을 활용한 로컬 캐싱 기능 구현.
 
 ## 동작 방식
-반환되어 오는 검색 결과값을 검색 키워드를 key로, 데이터를 value로 로컬 스토리지에 저장한다.
+사용자가 검색 키워드를 입력하면, 이 키워드는 API 호출의 파라미터로 사용됩니다.
 
-사용자가 키워드를 입력하면 우선 로컬 스토리지에 해당 데이터가 저장되어있는지 확인하여, 동일한 데이터가 저장되어 있다면 API 호출을 하지 않고 해당 데이터를 가져와서 반환한다.
+1. 로컬 스토리지 캐싱 확인:
 
-동일한 데이터가 없을 경우 API 호출을 실행하여 서버에서 데이터를 받아오는데, 이때 데이터는 로컬 스토리지에 저장해준다. 데이터를 저장할 때 캐싱 유효기간 구현을 위해 현재 시간 데이터를 가져와서 유효 기간을 설정하여 같이 저장한다.
+입력된 키워드는 우선 로컬 스토리지에서의 key로 사용됩니다. 이를 통해 해당 키워드에 대한 캐싱된 데이터가 있는지 먼저 확인합니다.
+저장된 캐싱 데이터가 있다면, 캐싱의 유효 기간을 체크합니다. 유효 기간이 경과한 데이터는 로컬 스토리지에서 삭제하며, 그렇지 않은 경우 저장된 데이터를 바로 반환합니다.
 
-![image](https://github.com/Akows/wanted-pre-onboarding-12th-team17-week3/assets/54127322/126e2cfc-6c80-4e85-95b7-eef21285f67a)
+2. API 호출:
 
-이후 사용자가 다시 키워드를 검색할 경우 API를 호출하기 전에 로컬 스토리지에 캐싱 여부를 확인하는데, 이때 스토리지 내부에 일치하는 데이터가 있다 하더라도 유효기간이 경과하였다면 데이터를 삭제한다.
-유효기간 경과로 데이터가 삭제되었을 경우, 해당 데이터가 스토리지에 캐싱되지 않은 것이라 간주하고 API 호출을 실행한다.
+로컬 스토리지에 캐싱된 데이터가 없거나, 캐싱 데이터의 유효기간이 만료되어 삭제된 경우, API를 호출하여 신규 데이터를 요청합니다.
 
-![image](https://github.com/Akows/wanted-pre-onboarding-12th-team17-week3/assets/54127322/9e7d367f-af5c-472d-a687-b342fb012452)
+3.로컬 스토리지에 데이터 저장:
 
-![image](https://github.com/Akows/wanted-pre-onboarding-12th-team17-week3/assets/54127322/192a1ca6-d92b-405c-8da5-3486e3d9a590)
+API 호출을 통해 받아온 데이터는 키워드를 key값으로 하여 로컬 스토리지에 저장됩니다. 이 때, 데이터와 함께 현재 시간 기반의 유효기간도 설정되어 저장됩니다.
 
-![image](https://github.com/Akows/wanted-pre-onboarding-12th-team17-week3/assets/54127322/a1bce477-c9fc-4ce8-8fef-b66eada52305)
+4. 데이터 사용:
 
-스토리지에 캐싱되어있지 않은 데이터를 호출할 때는 위와 같이 API를 새롭게 호출하고 스토리지에 캐싱한다.
-그리고 캐싱되어 있는 데이터를 불러오는 경우에는..
-
-![image](https://github.com/Akows/wanted-pre-onboarding-12th-team17-week3/assets/54127322/1bfe45c7-491b-4199-bb4f-2270f6f6fba3)
-
-API 호출을 실행하지 않는 것을 알 수 있다.
+캐싱된 데이터나 새로 호출된 데이터는 커스텀 훅을 통해 컴포넌트에서 사용될 수 있도록 export됩니다.
 </details>
 
 #### [Assignment 3] API 호출 최적화
@@ -168,8 +163,7 @@ API 호출을 실행하지 않는 것을 알 수 있다.
 <summary>구현 방법</summary>
 
 ## 기본 구조
-로컬 캐싱 기능이 API 호출 최적화 전략 중 하나이지만, 이 프로젝트의 경우 사용자가 검색어를 입력할 때마다 API를 호출하기 때문에 불필요한 호출이 이루어질 수 밖에 없다. 
-이럴 때 사용할 수 있는 전략이 debounce. debounce는 사용자가 입력을 마친 다음 일정 시간이 지나고 나서 다음 기능이 동작하도록 시간 지연을 걸어준다.
+로컬 캐싱은 API 호출 최적화의 방법 중 하나이지만, 사용자의 지속적인 입력으로 인한 빈번한 API 호출을 줄이기 위한 추가 전략이 필요합니다. 이때 활용할 수 있는 기술이 'debounce'입니다. debounce는 사용자의 연속적인 입력 도중에 API 호출을 지연시켜 불필요한 호출을 최소화하는 방법입니다.
 
 ## 동작 방식
 ```
@@ -188,13 +182,7 @@ export function debounce(fn: (...args: any[]) => void, delay: number) {
   };
 }
 ```
-debounce 함수는 API 호출 커스텀 훅의 데이터를 호출하는 함수와 함수의 실행 지연 시간을 인자로 받아 사용한다.
-
-debounce 함수가 호출되었을 때 setTimeout으로 인해 데이터를 호출하는 함수가 호출되지만 일정 시간 뒤에 실행되도록 지연된다.
-그런데 만약에 debounce 함수가 다시 호출될 경우 기존에 존재하던 setTimeout 함수를 취소하고 다시 실행하게 된다.
-
-즉, 사용자가 입력하는 동안에는 setTimeout가 호출되었다가 사라지고, 다시 호출되고 사라지고를 반복하게 된다.
-사용자가 입력을 마치고 추가 입력을 멈출 경우 setTimeout가 동작하여 데이터를 호출하는 함수가 실행되게 된다.
+debounce 함수는 주어진 함수(fn)를 일정 시간(delay) 동안 지연시킨 후 호출합니다. timerId는 설정된 지연 시간 동안의 타이머를 관리하며, 만약 새로운 입력이 있을 경우 이전 타이머는 clearTimeout를 통해 취소됩니다. 이로 인해 사용자가 입력을 중지할 때까지 실제 함수 호출이 지연되며, 최종적인 입력 후에만 함수가 실행됩니다.
 
 </details>
 
@@ -206,51 +194,48 @@ debounce 함수가 호출되었을 때 setTimeout으로 인해 데이터를 호�
 <summary>구현 방법</summary>
 
 ## 기본 구조
-KeyboardEvent를 사용하여 사용자가 특정 키를 입력했을 때 어떤 동작이 실행되도록 구현한다.
+키보드 이벤트를 활용하여, 사용자의 키 입력에 따라 특정 UI 동작을 제어하는 것은 사용자 경험(UX)을 향상시키는 중요한 방법 중 하나입니다. 본 예제에서는 KeyboardEvent를 활용하여 사용자가 특정 키를 입력했을 때 리스트 내의 항목 선택 동작을 구현하겠습니다.
 
 ## 동작 방식
-```
-  // 선택된 항목의 인덱스를 추적하는 상태 변수
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+먼저, 사용자가 선택한 항목의 인덱스를 추적하기 위한 상태 변수 selectedIndex를 정의합니다.
 
-  const handleKeyDown = (event: React.KeyboardEvent) => {
+```
+const [selectedIndex, setSelectedIndex] = useState(-1);
+```
+다음으로, handleKeyDown 함수를 통해 키보드의 아래쪽 및 위쪽 키 입력에 따른 동작을 정의합니다.
+
+```
+const handleKeyDown = (event: React.KeyboardEvent) => {
     switch (event.key) {
-      case 'ArrowDown':
-        // 아래쪽 키를 눌렀을 때, 선택된 인덱스를 증가시킴
-        setSelectedIndex(prevIndex => Math.min(prevIndex + 1, data.length - 1));
-        break;
-      case 'ArrowUp':
-        // 위쪽 키를 눌렀을 때, 선택된 인덱스를 감소시킴
-        setSelectedIndex(prevIndex => Math.max(prevIndex - 1, 0));
-        break;
-      default:
-        break;
-    }
-  };
+    case 'ArrowDown':
+      // 아래쪽 키를 눌렀을 때, 선택된 인덱스를 증가시킴
+      setSelectedIndex(prevIndex => Math.min(prevIndex + 1, data.length - 1));
+      break;
+    case 'ArrowUp':
+      // 위쪽 키를 눌렀을 때, 선택된 인덱스를 감소시킴
+      setSelectedIndex(prevIndex => Math.max(prevIndex - 1, 0));
+      break;
+    default:
+      break;
+  }
+};
 ```
+이 함수를 통해 아래쪽 및 위쪽 키를 누를 때마다, setSelectedIndex를 활용해 선택된 항목의 인덱스 값을 조절합니다.
 
-사용자가 키보드의 아래 혹은 위 키를 입력하게 되면 setSelectedIndex가 호출되어 selectedIndex의 값을 변화시킨다.
-selectedIndex의 값은 자식 컴포넌트인 검색 결과 출력 컴포넌트로 props 전달되는데,
+선택된 항목의 인덱스는 자식 컴포넌트로 전달되어, 해당 항목에는 특정 배경색(#f3f3f3)이 적용됩니다. 다음은 해당 동작을 구현한 코드 예시입니다.
 
 ```
-      {data && data.length > 0 ? (
-        data.map((item, index) => (
-          <SearchItem
-            key={item.sickCd}
-            style={{
-              backgroundColor:
-                index === selectedIndex ? '#f3f3f3' : 'transparent',
-            }} // 선택된 항목의 배경색 변경
-          >
+{data && data.length > 0 ? (
+  data.map((item, index) => (
+    <SearchItem
+      key={item.sickCd}
+      style={{
+        backgroundColor: index === selectedIndex ? '#f3f3f3' : 'transparent',
+      }} // 선택된 항목에 대한 배경색 적용
+    >
+  ))
+) : null}
 ```
-
-selectedIndex의 값과 map 함수로 렌더링되는 검색 결과 요소들의 index를 비교,
-해당되는 요소에는 style 속성을 이용하여 배경색이 #f3f3f3으로 적용되고
-해당되지 않는 요소들은 transparent 속성으로 배경색이 적용되지 않도록 구분하였다.
-
-![image](https://github.com/Akows/wanted-pre-onboarding-12th-team17-week3/assets/54127322/be9a79fa-7da7-4c24-b54f-9f591dfc7a8a)
-
-
 </details>
 
 
