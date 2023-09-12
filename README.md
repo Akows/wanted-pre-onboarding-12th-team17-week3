@@ -93,8 +93,6 @@ $ npm run start
 
 ## ✨ Assignments별 구현 방식
 
-#### 과제 소개 [🔗Link](https://github.com/Akows/wanted-pre-onboarding-12th-team17-week3)
-
 #### [Assignment 1] 검색창 및 검색어 추천 기능
 
 <details>
